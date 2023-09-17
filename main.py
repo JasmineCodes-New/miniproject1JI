@@ -25,16 +25,8 @@ def getClosing(ticker):
     # amended to add dates
     return closing_list, dates
 
-# Create our charts folder
-try:
-    Path("charts").mkdir()
-except FileExistsError:
-    pass
-
-stocks = ["MSFT", "AAPL", "AMZN", "ADBE", "NVDA"]
-
-# loop through all stocks in list
-for stock in stocks:
+def printGraphs(stock):
+    # loop through all stocks in list
     stock_closing, dates = np.array(getClosing(stock))
     days = list(range(1, len(stock_closing) + 1))
 
@@ -64,6 +56,35 @@ for stock in stocks:
     # Shows the graph
     plt.show()
 
+def getStocks():
+    stocks = []
+    print("Please enter 5 stocks to graph with the letter code (Example - AAPL): ")
+
+    for i in range(1, 6):
+        while True:
+            print("Enter stock ticker number: " + str(i))
+            ticker = input("> ")
+
+            try:
+                print("Checking Ticker")
+                stock = yf.Ticker("MSFT")
+                stock.info
+                stocks.append(ticker)
+                print("Valid Ticker")
+                break
+            except:
+                print("That is not a valid stock. Please enter another. ")
+    return stocks
+
+# Start program
+# Create our charts folder
+try:
+    Path("charts").mkdir()
+except FileExistsError:
+    pass
+for stock in getStocks():
+    getClosing(stock)
+    printGraphs(stock)
 
 #(20/20 points) Using an API of your choice (yfinance works), collect the closing price of 5 of your favorite stock tickers for the last 10 trading days.
 #(10/10 points) Store this information in a list that you will convert to an array in NumPy.
