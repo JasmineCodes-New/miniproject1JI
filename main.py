@@ -4,37 +4,55 @@
 import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
+import copy
 import pprint
 
 #(5/5 points) Initial comments with your name, class and project at the top of your .py file.
 #(5/5 points) Proper import of packages used.
 
 def getClosing(ticker):
-    # get the closing price for the last ten closing days
     stock = yf.Ticker(ticker)
-    # get historical market data
     hist = stock.history(period='10d')
     closing_list = []
+    dates = []
 
-    for price in hist['Close']:
+    # ammended to add dates as well as price to list
+    for date, price in zip(hist.index, hist['Close']):
+        dates.append(date.date())
         closing_list.append(round(price, 2))
 
-    print(closing_list)
+    # ammended to add dates
+    return closing_list, dates
 
-    return closing_list
-
-# Microsoft, Apple, Amazon, Adobe, Nvidia
 stocks = ["MSFT", "AAPL", "AMZN", "ADBE", "NVDA"]
 
-msft_closing = np.array(getClosing("MSFT"))
+# loop through all stocks in list
+for stock in stocks:
+    stock_closing, dates = np.array(getClosing(stock))
+    days = list(range(1, len(stock_closing) + 1))
 
-plt.plot(msft_closing)
+    # Plots the graph
+    plt.plot(days, stock_closing)
 
-plt.xlabel("Days")
+    # get our min and max for Y
+    prices = getClosing(stock)[0]
+    low_price = min(prices)
+    high_price = max(prices)
+    plt.axis([1, 10, low_price - 2, high_price + 2])
 
-plt.ylabel("Closing Price")
+    # Set our xaxis min and max
+    # form [xmin, xmax, ymin, ymax]
+    plt.xticks(days, dates, rotation=45)
 
-plt.show()
+    # Update x-axis label to "Date"
+    # Set our labels for the graph
+    plt.xlabel("Date")
+    plt.ylabel("Closing Price")
+    plt.title("Closing Price for " + stock)
+
+    # Shows the graph
+    plt.show()
+
 
 
 #(20/20 points) Using an API of your choice (yfinance works), collect the closing price of 5 of your favorite stock tickers for the last 10 trading days.
