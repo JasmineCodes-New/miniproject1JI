@@ -1,11 +1,11 @@
 # INF 601 - Advanced Programming with Python
 # Jasmine Irvin
 # Mini Project 1
+
 import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
-import copy
-import pprint
+from pathlib import Path
 
 #(5/5 points) Initial comments with your name, class and project at the top of your .py file.
 #(5/5 points) Proper import of packages used.
@@ -14,15 +14,22 @@ def getClosing(ticker):
     stock = yf.Ticker(ticker)
     hist = stock.history(period='10d')
     closing_list = []
+    # added empty dates list
     dates = []
 
-    # ammended to add dates as well as price to list
+    # amended to add dates as well as price to list
     for date, price in zip(hist.index, hist['Close']):
         dates.append(date.date())
         closing_list.append(round(price, 2))
 
-    # ammended to add dates
+    # amended to add dates
     return closing_list, dates
+
+# Create our charts folder
+try:
+    Path("charts").mkdir()
+except FileExistsError:
+    pass
 
 stocks = ["MSFT", "AAPL", "AMZN", "ADBE", "NVDA"]
 
@@ -50,9 +57,12 @@ for stock in stocks:
     plt.ylabel("Closing Price")
     plt.title("Closing Price for " + stock)
 
+    # save the outputted charts in the chart folder as png files
+    savefile = "charts/" + stock + ".png"
+    plt.savefig(savefile)
+
     # Shows the graph
     plt.show()
-
 
 
 #(20/20 points) Using an API of your choice (yfinance works), collect the closing price of 5 of your favorite stock tickers for the last 10 trading days.
