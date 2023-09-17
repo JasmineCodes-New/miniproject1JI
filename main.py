@@ -10,6 +10,7 @@ import pprint
 #(5/5 points) Proper import of packages used.
 
 def getClosing(ticker):
+    # get the closing price for the last ten closing days
     stock = yf.Ticker(ticker)
     # get historical market data
     hist = stock.history(period='10d')
@@ -25,9 +26,15 @@ def getClosing(ticker):
 # Microsoft, Apple, Amazon, Adobe, Nvidia
 stocks = ["MSFT", "AAPL", "AMZN", "ADBE", "NVDA"]
 
-# stocks = np.array(stocks)
-msft = getClosing("MSFT")
-print(msft)
+msft_closing = np.array(getClosing("MSFT"))
+
+plt.plot(msft_closing)
+
+plt.xlabel("Days")
+
+plt.ylabel("Closing Price")
+
+plt.show()
 
 
 #(20/20 points) Using an API of your choice (yfinance works), collect the closing price of 5 of your favorite stock tickers for the last 10 trading days.
