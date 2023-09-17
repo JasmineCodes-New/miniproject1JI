@@ -26,7 +26,6 @@ def getClosing(ticker):
     return closing_list, dates
 
 def printGraphs(stock):
-    # loop through all stocks in list
     stock_closing, dates = np.array(getClosing(stock))
     days = list(range(1, len(stock_closing) + 1))
 
